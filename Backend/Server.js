@@ -4,6 +4,7 @@ const cors = require("cors");
 app.use(cors());
 const mongoose = require("mongoose");
 app.use(express.json());
+const PORT = process.env.PORT || 8000;
 
 const mongourl =
   "mongodb+srv://Vignesh:Vignesh27@cluster0.cw71i.mongodb.net/";
@@ -66,6 +67,6 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-app.listen(8000, () => {
+app.listen(PORT, () => {
   console.log("Server Started On Port 8000");
 });
