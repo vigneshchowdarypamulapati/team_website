@@ -86,10 +86,13 @@ export default function Login() {
     }).then((res)=>res.json())
     .then((data)=>{
         console.log(data);
-        if(data==="Login successfull"){
+        if(data.message === "Login successfull"){
           alert("Login successfull");
           history("/firstpage");
-        }
+        }else {
+        // Access the 'message' property of the response and show it in the alert
+        alert(data.message || "Error occurred");
+      }
     })
     .catch((error) => {
       console.error("Error during signin:", error);
