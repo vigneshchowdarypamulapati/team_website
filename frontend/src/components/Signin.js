@@ -86,10 +86,14 @@ export default function Login() {
     }).then((res)=>res.json())
     .then((data)=>{
         console.log(data);
-        alert(data);
         if(data==="Login successfull"){
+          alert("Login successfull")
           history("/firstpage");
         }
+    })
+    .catch((error) => {
+      console.error("Error during signin:", error);
+      alert("An error occurred. Please try again later.");
     });
     // console.log(`The username you entered in sign up  was: ${Firstname}`);
     console.log(email,password);
