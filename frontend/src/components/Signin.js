@@ -87,7 +87,7 @@ export default function Login() {
     .then((data)=>{
         console.log(data);
         if(data==="Login successfull"){
-          alert("Login successfull")
+          alert("Login successfull");
           history("/firstpage");
         }
     })
