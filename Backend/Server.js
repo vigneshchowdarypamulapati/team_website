@@ -8,7 +8,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8000; // Port from environment variables or fallback to 8000
 const MONGO_URL = "mongodb+srv://Vignesh:Vignesh27@cluster0.cw71i.mongodb.net/"; // MongoDB URL from environment variables
-const FRONTEND_URL = "http://localhost:3000"; // Frontend URL for CORS configuration
+const FRONTEND_URL = "https://team-website-frontend.onrender.com"; // Frontend URL for CORS configuration
 
 // CORS Configuration
 app.use(
