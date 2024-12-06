@@ -3,16 +3,17 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // To parse incoming JSON requests
 
-const PORT = process.env.PORT || 8000; // Port for the server
-const MONGO_URL = "mongodb+srv://Vignesh:Vignesh27@cluster0.cw71i.mongodb.net/"; // MongoDB connection string
+// Server and MongoDB configuration
+const PORT = process.env.PORT || 8000; // Server port
+const MONGO_URL = "mongodb+srv://Vignesh:Vignesh27@cluster0.cw71i.mongodb.net/myDatabase?retryWrites=true&w=majority"; // MongoDB connection string with retryWrites for safety
 const FRONTEND_URL = "https://team-website-frontend.onrender.com"; // Frontend URL for CORS configuration
 
 // CORS Configuration
 app.use(
   cors({
-    origin: FRONTEND_URL, // Allow only your deployed frontend to access this backend
+    origin: FRONTEND_URL, // Allow only the deployed frontend to access this backend
     methods: ["GET", "POST"], // Specify allowed methods
     credentials: true, // Allow cookies/credentials if needed
   })
@@ -22,17 +23,18 @@ app.use(
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true, // Recommended for MongoDB connection
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to MongoDB database");
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1); // Exit process if the database connection fails
   });
 
 // Load Mongoose Models
-require("./Userdetails"); // Ensure you have the Userdetails model file in the same directory
+require("./Userdetails"); // Ensure the `Userdetails` file defines the `user` model
 const User = mongoose.model("user");
 
 // Routes
@@ -40,45 +42,49 @@ const User = mongoose.model("user");
 // Signup Route
 app.post("/signup", async (req, res) => {
   const { fname, lname, dob, email, pass } = req.body;
+
   try {
     console.log("Signup request received:", req.body);
 
-    // Check if user already exists
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json("User already exists"); // HTTP 409 Conflict
+      return res.status(409).json({ message: "User already exists" });
     }
 
     // Create a new user
-    await User.create({ fname, lname, dob, email, pass });
-    res.status(201).json("Registration successful"); // HTTP 201 Created
+    const newUser = new User({ fname, lname, dob, email, pass });
+    await newUser.save();
+
+    res.status(201).json({ message: "Registration successful" });
   } catch (error) {
     console.error("Error in signup route:", error.message);
-    res.status(500).json({ status: "error", message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // Signin Route
 app.post("/signin", async (req, res) => {
   const { email, pass } = req.body;
+
   try {
     console.log("Signin request received:", req.body);
 
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json("User not found"); // HTTP 404 Not Found
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Validate password
     if (user.pass !== pass) {
-      return res.status(401).json("Invalid password"); // HTTP 401 Unauthorized
+      return res.status(401).json({ message: "Invalid password" });
     }
 
-    res.status(200).json("Login successful"); // HTTP 200 OK
+    res.status(200).json({ message: "Login successful" });
   } catch (error) {
     console.error("Error in signin route:", error.message);
-    res.status(500).json({ status: "error", message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
