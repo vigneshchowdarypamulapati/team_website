@@ -5,7 +5,6 @@ import image from "../images/login.jpg";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Login() {
   var bg = {
     backgroundImage: `url(${image})`,
@@ -16,91 +15,51 @@ export default function Login() {
 
   const history = useNavigate();
 
-  // const [inpval, setInpval] = useState({
-  //   Firstname: "",
-  //   Lastname: "",
-  //   date: "",
-  //   email: "",
-  //   password: "",
-  // });
-  // console.log(inpval);
-
-  // const getdata = (e) => {
-  //   // console.log(e.target.value);
-  //   const { value, name} = e.target;
-  //   setInpval(() => {
-  //     return {
-  //       ...inpval,
-  //       [name]: value,
-  //     };
-  //   });
-  // };
   const [email, setEmail] = useState('');
-  // const [date, setDate] = useState('');
-  // const [Firstname, setFirstName] = useState('');
-  // const [Lastname, setLastName] = useState('');
   const [password, setPassword] = useState('');
-
 
   const validate = (e) => {
     e.preventDefault();
-    // const { Firstname,Lastname, date, email, password } = inpval;
-    // if (Firstname === "") {
-    //   alert("name field is required");
-    // }
-    // else if (Lastname === "") {
-    //   alert("name field is required");
-    // }
-    // else if (date === "") {
-    //   alert("dob field is required");
-    // } 
     if (email === "") {
-      alert("email field is required");
+      alert("Email field is required");
     } else if (!email.includes("@")) {
-      alert("please enter a valid email address");
+      alert("Please enter a valid email address");
     } else if (password === "") {
       alert("Password is required");
     } else {
-      // alert("Login sucessful");
       handlesubmit();
     }
   };
 
-  const handlesubmit = (e) => {
-    // e.preventDefault();
-    fetch("https://team-website-backend.onrender.com/signin",{
-        method:"POST",
-        crossDomain:true,
-        headers:{
-            "Content-Type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
-        },
-        body:JSON.stringify({
-            // fname:Firstname,
-            // lname:Lastname,
-            // dob:date,
-            email:email,
-            pass:password,
-        }),
-    }).then((res)=>res.json())
-    .then((data)=>{
-        console.log(data);
-        if(data.message === "Login successfull"){
-          alert("Login successfull");
-          history("/firstpage");
-        }else {
-        // Access the 'message' property of the response and show it in the alert
-        alert(data.message || "Error occurred");
-      }
+  const handlesubmit = () => {
+    fetch("https://team-website-backend.onrender.com/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        email: email,
+        pass: password,
+      }),
     })
-    .catch((error) => {
-      console.error("Error during signin:", error);
-      alert("An error occurred. Please try again later.");
-    });
-    // console.log(`The username you entered in sign up  was: ${Firstname}`);
-    console.log(email,password);
-  }
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.message === "Login successful") {
+          alert("Login successful");
+          history("/firstpage"); // This is the routing after login
+        } else {
+          // Access the 'message' property of the response and show it in the alert
+          alert(data.message || "Error occurred");
+        }
+      })
+      .catch((error) => {
+        console.error("Error during signin:", error);
+        alert("An error occurred. Please try again later.");
+      });
+  };
 
   return (
     <>
@@ -120,58 +79,34 @@ export default function Login() {
             Sign In
           </h3>
           <Form onSubmit={validate}>
-            {/* <Form.Group className="mx-4 my-3">
-              <Form.Control
-                type="text"
-                name="Firstname"
-                // onChange={(e) => getdata(e)}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Firstname"
-              />
-            </Form.Group>
-            <Form.Group className="mx-4 my-3">
-              <Form.Control
-                type="text"
-                name="Lastname"
-                // onChange={e => getdata(e)}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Lastname"
-              />
-            </Form.Group> */}
-            {/* <Form.Group className="mx-4 my-3">
-              <Form.Control type="date" name="date" onChange={(e) => setDate(e.target.value)} />
-            </Form.Group> */}
             <Form.Group className="mx-4 my-3">
               <Form.Control
                 type="email"
                 name="email"
-                // onChange={getdata}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder=" Your Email"
+                placeholder="Your Email"
               />
             </Form.Group>
             <Form.Group className="mx-4 my-3">
               <Form.Control
                 type="password"
                 name="password"
-                // onChange={getdata}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder=" Your Password"
+                placeholder="Your Password"
               />
             </Form.Group>
-            <div style={{display: "flex", justifyContent: "center"}}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <Button
                 variant="success"
                 className="mx-4"
-                onClick={validate}
-                type="submit"
+                type="submit" // Removing onClick here
               >
                 Submit
               </Button>
             </div>
           </Form>
           <p className="mt-3 mx-5" style={{ color: "white" }}>
-            Don't have an account ?
+            Don't have an account?{" "}
             <span>
               <NavLink style={{ color: "red" }} to="/signup">
                 Sign Up
