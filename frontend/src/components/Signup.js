@@ -85,10 +85,17 @@ export default function Login() {
     }).then((res)=>res.json())
     .then((data)=>{
         console.log(data);
-        alert(data);
-        if(data==="Registration successfull"){
-          history("/firstpage");
-        }
+        if (data.message === "Registration successful") {
+        alert("Registration successful");
+        history("/firstpage");
+      } else {
+        // Access the 'message' property of the response and show it in the alert
+        alert(data.message || "Error occurred");
+      }
+    })
+    .catch((error) => {
+      console.error("Error during signup:", error);
+      alert("An error occurred. Please try again later.");
     });
     // console.log(`The username you entered in sign up  was: ${Firstname}`);
     console.log(Firstname,Lastname,date,email,password);
