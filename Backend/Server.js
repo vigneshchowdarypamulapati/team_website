@@ -12,7 +12,7 @@ const FRONTEND_URL = "https://team-website-frontend.onrender.com"; // Frontend U
 // CORS Configuration
 app.use(
   cors({
-    origin: FRONTEND_URL, // Restrict access to the frontend URL
+    origin: "https://team-website-frontend.onrender.com", // Restrict access to the frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     credentials: true, // Allow cookies and credentials if needed
   })
@@ -20,7 +20,7 @@ app.use(
 
 // MongoDB Connection
 mongoose
-  .connect(MONGO_URL, {
+  .connect("mongodb+srv://Vignesh:Vignesh27@cluster0.cw71i.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true, // Recommended option for MongoDB connection
   })
